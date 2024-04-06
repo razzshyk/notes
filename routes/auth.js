@@ -2,6 +2,7 @@ const express = require("express")
 const mongoose = require("mongoose")
 const route = express.Router()
 const bycrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
 
 require("../db/connection")
 const User = require("../model/userSchema")
@@ -49,18 +50,27 @@ route.post(("/signup"), (req, res) => {
 
 // Login Api
 route.post("/login", (req, res) => {
+    
     const { email, password } = req.body;
 
     User.findOne({ email: email }).then((user) => {
         if (!user) {
             return res.status(400).json({ error: "Invalid email." });
         }
-        bycrypt.compare(password, user.password).then((isMatch)=>{
+        bycrypt.compare(password, user.password).then((isMatch) => {
             if (!isMatch) {
                 // console.log("wrong pass entered")
                 return res.status(400).json({ error: "Invalid password." });
             }
             console.log(user)
+            // added a method in the instance of user means when user logging in this method will fire
+            token = user.generateAuthToken().then((isGen) => {
+                if (isGen) {
+                    console.log("token generated successfully")
+                    console.log(token)
+                }
+            }).catch((e) => console.log(e))
+
             res.status(200).send({ message: "User logged in successfully." });
         })
     }).catch((error) => {
