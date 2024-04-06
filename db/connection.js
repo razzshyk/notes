@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 
-const DB = "mongodb+srv://alifarhaan800:442UtlHlfqlIKOiY@cluster0.llfofrn.mongodb.net/"
+const DB = process.env.DB
 
 
 mongoose.connect(DB).then(()=>{

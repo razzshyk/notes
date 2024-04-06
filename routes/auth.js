@@ -48,27 +48,16 @@ route.post(("/signup"), (req, res) => {
 // Login Api
 route.post("/login", (req, res) => {
     const { email, password } = req.body;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    console.log(req.body.email)
-
-    if (!email || !password) {
-        return res.status(400).send({ error: "Fill all fields, please." });
-    } else if (password.length > 8) {
-        return res.status(413).send({ error: "Password should be less than 8 characters." });
-    } else if (!emailRegex.test(email)) {
-        return res.status(422).send({ error: "Invalid email." });
-    }
-
     
     User.findOne({ email: email }).then((user) => {
         if (!user) {
-            return res.status(422).send({ error: "User does not exist with this email." });
+            return res.status(400).send({ error: "Invalid email." });
         }
 
         if (user.password !== password) {
-            return res.status(401).send({ error: "Incorrect password." });
+            return res.status(400).send({ error: "Invalid password." });
         }
-
+        console.log(user)
         res.status(200).send({ message: "User logged in successfully." });
     }).catch((error) => {
         console.log(error);
