@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
-const myDb = require("../db/connection")
+const bycrypt = require("bcryptjs")
+
 
 const userSchema = mongoose.Schema({
     fname : {
@@ -23,6 +24,15 @@ const userSchema = mongoose.Schema({
         require : true
     }
 })
+
+// password hashing using bycrptjs 
+userSchema.pre('save', async function(next) {
+    console.log("hi from inside")
+    if(this.isModified('password')){
+        this.password = await bycrypt.hash(this.password,  12)
+    }
+    next()
+});
 
 const Users = mongoose.model("USERS",userSchema)
 module.exports = Users

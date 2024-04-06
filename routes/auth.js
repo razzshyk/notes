@@ -1,6 +1,7 @@
 const express = require("express")
 const mongoose = require("mongoose")
 const route = express.Router()
+const bycrypt = require("bcryptjs")
 
 require("../db/connection")
 const User = require("../model/userSchema")
@@ -16,7 +17,7 @@ route.post(("/signup"), (req, res) => {
     const { fname, lname, email, age, password } = req.body
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    console.log(req.body.fname)
+    // console.log(req.body.fname)
 
     if (!fname || !lname || !email || !age || !password) {
         res.status(400).send({ error: "fill all Fields please" })
@@ -38,6 +39,7 @@ route.post(("/signup"), (req, res) => {
             return
         }
         const user = new User({ fname, lname, email, age, password })
+        // yaha pe bycrypt middleware chlygi or hash hojayega password 
         user.save().then(() => {
             res.status(201).json({ mesaage: "Data is succesfly uploaded in DB" })
         }).catch((err) => { res.status(500).json({ error: "failed To registered" }) })
@@ -48,19 +50,21 @@ route.post(("/signup"), (req, res) => {
 // Login Api
 route.post("/login", (req, res) => {
     const { email, password } = req.body;
-    
+
     User.findOne({ email: email }).then((user) => {
         if (!user) {
-            return res.status(400).send({ error: "Invalid email." });
+            return res.status(400).json({ error: "Invalid email." });
         }
-
-        if (user.password !== password) {
-            return res.status(400).send({ error: "Invalid password." });
-        }
-        console.log(user)
-        res.status(200).send({ message: "User logged in successfully." });
+        bycrypt.compare(password, user.password).then((isMatch)=>{
+            if (!isMatch) {
+                // console.log("wrong pass entered")
+                return res.status(400).json({ error: "Invalid password." });
+            }
+            console.log(user)
+            res.status(200).send({ message: "User logged in successfully." });
+        })
     }).catch((error) => {
-        console.log(error);
+        console.log(error)
         res.status(500).send({ error: "Internal server error." });
     });
 });
