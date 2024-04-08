@@ -1,5 +1,5 @@
 import React from "react";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Card,
   Input,
@@ -7,9 +7,10 @@ import {
   Button,
   Typography,
 } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
+import { Link , useNavigate} from "react-router-dom";
 
 export default function Login() {
+  const nav = useNavigate()
   const [load, setLoad] = useState(false);
   const [LregData, setLregData] = useState({
     email: "",
@@ -18,25 +19,33 @@ export default function Login() {
   const submit = async (e) => {
     e.preventDefault();
     setLoad(true);
-    const res = await fetch("/api/login", {     
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(LregData),
-    })
-      .then((res) => {
-        if (res) {
-          console.log("data sucessfully handed to backend", LregData);
-          setLoad(false);
-          setLregData({email:"",password:""});
-        }
-      })
-      .catch((e) => {
-        setLoad(false);
-        console.log(e);
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },  
+        body: JSON.stringify(LregData),
       });
+      const data = await res.json(); // Await the promise
+      const errorStatuses = [400,401]
+      if (errorStatuses.includes(res.status) || !data) {
+        setLoad(false);
+        console.log(data);
+        window.alert(data.error)
+
+      } else {
+        setLoad(false);
+        console.log("Data successfully handed to backend", data);
+        setLregData({email:"",password:""})
+        window.alert("User logged in");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setLoad(false);
+    }
   };
+
   return (
     <Card
       color="transparent"

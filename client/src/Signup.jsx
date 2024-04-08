@@ -7,9 +7,10 @@ import {
   Button,
   Typography,
 } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function SimpleRegistrationForm() {
+  const nav = useNavigate();
   const [load, setLoad] = useState(false);
   const [regData, setregData] = useState({
     fname: "",
@@ -21,24 +22,30 @@ export default function SimpleRegistrationForm() {
   const submit = async (e) => {
     e.preventDefault();
     setLoad(true);
-    const res = await fetch("/api/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(regData),
-    })
-      .then((res) => {
-        if (res) {
-          console.log("data sucessfully handed to backend", regData);
-          setLoad(false);
-          setregData({ fname: "", lname: "", age: 0, email: "", password: ""});
-        }
-      })
-      .catch((e) => {
-        setLoad(false);
-        console.log(e);
+    try {
+      const res = await fetch("/api/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(regData),
       });
+      const data = await res.json(); // Await the promise
+      const errorStatuses = [400, 401, 422, 413];
+      if (errorStatuses.includes(res.status) || !data) {
+        setLoad(false);
+        console.log(data);
+        window.alert(data.error);
+      } else {
+        setLoad(false);
+        console.log("Data successfully handed to backend", data);
+        setregData({ fname: "", lname: "", age: 0, email: "", password: "" });
+        window.alert(`${res.status} User Signed in`);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setLoad(false);
+    }
   };
 
   return (

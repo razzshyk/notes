@@ -21,23 +21,22 @@ route.post(("/signup"), (req, res) => {
     // console.log(req.body.fname)
 
     if (!fname || !lname || !email || !age || !password) {
-        res.status(400).send({ error: "fill all Fields please" })
-        return
+        return res.status(400).send({ error: "fill all Fields please" })
     } else if (password.length > 8) {
-        res.status(413).send({ error: " password should be less than 8" })
-        return
+        return res.status(413).send({ error: "Password should be less than 8" })
+
     } else if (!emailRegex.test(email)) {
-        res.status(422).send({ error: " invalid email" })
-        return
+        return res.status(401).send({ error: " invalid email" })
+
     } else if (typeof fname !== 'string' || typeof lname !== 'string') {
-        res.status(400).send({ error: "Invalid name" });
-        return;
+        return res.status(400).send({ error: "Invalid name" });
+
     }
 
     User.findOne({ email: email }).then((userExist) => {
         if (userExist) {
-            res.status(422).send({ error: " user is already exist " })
-            return
+            return res.status(422).send({ error: " user is already exist " })
+
         }
         const user = new User({ fname, lname, email, age, password })
         // yaha pe bycrypt middleware chlygi or hash hojayega password 
@@ -50,22 +49,30 @@ route.post(("/signup"), (req, res) => {
 
 // Login Api
 route.post("/login", (req, res) => {
-    
+
     const { email, password } = req.body;
 
+    if (!email || !password) {
+        return res.status(400).send({ error: "fill all Fields please" })
+    }
     User.findOne({ email: email }).then((user) => {
         if (!user) {
-            return res.status(400).json({ error: "Invalid email." });
+            return res.status(401).json({ error: "Invalid credendials." });
         }
         bycrypt.compare(password, user.password).then((isMatch) => {
             if (!isMatch) {
                 // console.log("wrong pass entered")
-                return res.status(400).json({ error: "Invalid password." });
+                return res.status(401).json({ error: "Invalid credentials." });
             }
-            
+
             // added a method in the instance of user means when user logging in this method will fire
             user.generateAuthToken().then((token) => {
-                console.log("token generated successfully:", user)
+                console.log("token generated successfully:", token)
+                // res.status(200).send({ message: "User logged in successfully." });  cannot send multiple res to client in a single attempt as it shows headers error
+                res.cookie("jwtoken", token, {
+                    expires: new Date(Date.now() + 258920000),
+                    httpOnly: true
+                })
                 res.status(200).send({ message: "User logged in successfully." });
             }).catch((error) => {
                 console.log("Failed to generate token:", error);
@@ -78,6 +85,8 @@ route.post("/login", (req, res) => {
         console.log(error)
         res.status(500).send({ error: "Internal server error." });
     });
+
+
 })
 
 
