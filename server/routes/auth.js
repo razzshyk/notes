@@ -128,7 +128,7 @@ route.get("/auth", authenticate, (req, res) => {
 // logout api
 route.get("/logout", (req, res) => {
     res.clearCookie('jwtoken', { path: "/" })
-    res.status(200).send({ mesaage: "user logout" })
+    res.status(200).send({ message: "user logout" })
 })
 
 
