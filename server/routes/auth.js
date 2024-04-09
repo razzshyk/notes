@@ -26,11 +26,11 @@ route.post(("/signup"), (req, res) => {
     } else if (password.length > 8) {
         return res.status(413).send({ error: "Password should be less than 8" })
 
-    }else if (age > 95) {
+    } else if (age > 95) {
         return res.status(413).send({ error: "Invalid Age" })
 
     }
-     else if (!emailRegex.test(email)) {
+    else if (!emailRegex.test(email)) {
         return res.status(401).send({ error: " invalid email" })
 
     } else if (typeof fname !== 'string' || typeof lname !== 'string') {
@@ -125,6 +125,11 @@ route.get("/auth", authenticate, (req, res) => {
     res.send(req.loggedUser) //this sends the whole user object to my home page of the user logged in
 })
 
+// logout api
+route.get("/logout", (req, res) => {
+    res.clearCookie('jwtoken', { path: "/" })
+    res.status(200).send("user logout")
+})
 
 
 module.exports = route
