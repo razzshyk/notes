@@ -11,10 +11,6 @@ import { ToastAlert } from "./utils/toast";
 
 function App() {
   
-  
-
-  
-
   return (
     <>
       <Routes>

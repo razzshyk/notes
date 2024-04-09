@@ -49,11 +49,11 @@ const Home = (props) => {
       credentials: "include",
     })
       .then((res) => {
-        if (!res.status === 200) {
+        if (res.status !== 200) {
           ToastAlert(res.error, "error");
         }
-        ToastAlert(`${props.name.toUpperCase()} is logged out`);
         nav("/login");
+        ToastAlert(`${props.name.toUpperCase()} is logged out`);
       })
       .catch((e) => {
         console.log(e);
@@ -61,42 +61,48 @@ const Home = (props) => {
   };
   return (
     <>
-      <div className="absolute lg:right-5 right-2 top-2 lg:top-5">
-        <Button size="sm" className=" bg-[#4338ca]">
-          <p className="lg:text-lg text-[10px] tracking-wide" onClick={signout}>
-            Signout
-          </p>
-        </Button>
-      </div>
-      <div
-        style={{
-          backgroundImage: "url(/background.gif)",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-        }}
-        className="flex flex-col justify-center place-items-center h-screen"
-      >
-        <div className="flex flex-col gap-2 place-items-center">
-          <p
-            variant="p"
-            className="lg:text-[4rem] font-bold md:text-[3rem] text-[1rem] tracking-wider text-[#0891b2]"
-            textgradient="true"
+      {user ? (
+        <>
+          <div className="absolute lg:right-5 right-2 top-2 lg:top-5">
+            <Button size="sm" className=" bg-[#4338ca]" onClick={signout}>
+              <p className="lg:text-lg text-[10px] tracking-wide">Signout</p>
+            </Button>
+          </div>
+          <div
+            style={{
+              backgroundImage: "url(/background.gif)",
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
+            }}
+            className="flex flex-col justify-center place-items-center h-screen"
           >
-            Welcome To Notes Keeper
-          </p>
-          <p className="text-center lg:text-[2rem] text-[1rem] tracking-wider  text-[#a5b4fc]">
-            {(user.fname + " " + user.lname).toUpperCase()}
-          </p>
-          <Button size="sm" className=" bg-[#c026d3]">
-            <p
-              className="lg:text-lg text-[10px] tracking-wide"
-              onClick={() => nav("/notes")}
-            >
-              Go To My Notes
-            </p>
-          </Button>
+            <div className="flex flex-col gap-2 place-items-center">
+              <p
+                variant="p"
+                className="lg:text-[4rem] font-bold md:text-[3rem] text-[1rem] tracking-wider text-[#0891b2]"
+                textgradient="true"
+              >
+                Welcome To Notes Keeper
+              </p>
+              <p className="text-center lg:text-[2rem] text-[1rem] tracking-wider  text-[#a5b4fc]">
+                {(user.fname + " " + user.lname).toUpperCase()}
+              </p>
+              <Button size="sm" className=" bg-[#c026d3]">
+                <p
+                  className="lg:text-lg text-[10px] tracking-wide"
+                  onClick={() => nav("/notes")}
+                >
+                  Go To My Notes
+                </p>
+              </Button>
+            </div>
+          </div>
+        </>
+      ) : (
+        <div className="flex justify-center place-items-center h-screen">
+          <img src="/loader.gif" />
         </div>
-      </div>
+      )}
     </>
   );
 };

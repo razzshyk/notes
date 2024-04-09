@@ -39,7 +39,7 @@ export default function Login() {
         console.log("Data successfully handed to backend", data);
         setLregData({ email: "", password: "" });
         nav("/");
-        ToastAlert(`${res.status} user logged in`,"success");
+        ToastAlert(`${res.status} user logged in`, "success");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -48,20 +48,23 @@ export default function Login() {
   };
 
   return (
-    <Card
-      color="transparent"
-      className="flex justify-center place-items-center h-screen"
-      shadow={false}
+    <div
+      style={{
+        backgroundImage: "url(/Сomet.gif)",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+      }}
+      className="flex flex-col justify-center place-items-center h-screen"
     >
-      <Typography variant="h4" color="blue-gray">
+      <Typography variant="h4" color="white">
         Login
       </Typography>
-      <Typography color="gray" className="mt-1 font-normal">
+      <Typography color="white" className="mt-1 font-normal">
         Nice to meet you! Enter your details to register.
       </Typography>
       <form method="POST" className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
         <div className="mb-1 flex flex-col gap-6">
-          <Typography variant="h6" color="blue-gray" className="-mb-3">
+          <Typography variant="h6" color="white" className="-mb-3">
             Your Email
           </Typography>
           <Input
@@ -69,13 +72,14 @@ export default function Login() {
               setLregData({ ...LregData, email: e.target.value });
             }}
             size="lg"
+            style={{ color: '#718096' }}
             placeholder="name@mail.com"
-            className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+            className="text-slate-300 !border-t-blue-gray-200 focus:!border-t-gray-900"
             labelProps={{
               className: "before:content-none after:content-none",
             }}
           />
-          <Typography variant="h6" color="blue-gray" className="-mb-3">
+          <Typography variant="h6" color="white" className="-mb-3">
             Password
           </Typography>
           <Input
@@ -85,7 +89,7 @@ export default function Login() {
             type="password"
             size="lg"
             placeholder="********"
-            className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+            className="text-slate-300 !border-t-blue-gray-200 focus:!border-t-gray-900"
             labelProps={{
               className: "before:content-none after:content-none",
             }}
@@ -95,7 +99,7 @@ export default function Login() {
           label={
             <Typography
               variant="small"
-              color="gray"
+              color="white"
               className="flex items-center font-normal"
             >
               I agree the
@@ -109,13 +113,13 @@ export default function Login() {
         <Button onClick={submit} className="mt-6" fullWidth>
           {!load ? "Login" : "Loading..."}
         </Button>
-        <Typography color="gray" className="mt-4 text-center font-normal">
+        <Typography color="white" className="mt-4 text-center font-normal">
           Don't have an account?{" "}
           <Link to="/signup" className="font-medium text-gray-900">
             Signup
           </Link>
         </Typography>
       </form>
-    </Card>
+    </div>
   );
 }
