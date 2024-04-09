@@ -3,6 +3,7 @@ const mongoose = require("mongoose")
 const route = express.Router()
 const bycrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
+const authenticate = require("../middlewares/authenticate")
 
 require("../db/connection")
 const User = require("../model/userSchema")
@@ -25,7 +26,11 @@ route.post(("/signup"), (req, res) => {
     } else if (password.length > 8) {
         return res.status(413).send({ error: "Password should be less than 8" })
 
-    } else if (!emailRegex.test(email)) {
+    }else if (age > 95) {
+        return res.status(413).send({ error: "Invalid Age" })
+
+    }
+     else if (!emailRegex.test(email)) {
         return res.status(401).send({ error: " invalid email" })
 
     } else if (typeof fname !== 'string' || typeof lname !== 'string') {
@@ -67,10 +72,10 @@ route.post("/login", (req, res) => {
 
             // added a method in the instance of user means when user logging in this method will fire
             user.generateAuthToken().then((token) => {
-                console.log("token generated successfully:", token)
+                // console.log("token generated successfully:", token)
                 // res.status(200).send({ message: "User logged in successfully." });  cannot send multiple res to client in a single attempt as it shows headers error
                 res.cookie("jwtoken", token, {
-                    expires: new Date(Date.now() + 258920000),
+                    expires: new Date(Date.now() + 25892000000),
                     httpOnly: true
                 })
                 res.status(200).send({ message: "User logged in successfully." });
@@ -89,6 +94,36 @@ route.post("/login", (req, res) => {
 
 })
 
+
+// Middlewares
+
+// user auth using middleware : a simple js functions used in between route('/') and (req,res) and 
+// it runs before of user visited that particular route
+
+
+// const middleware = (req,res,next) => {
+//     console.log("hello my middleware")
+//     next(); it has to be called to furthur proceed the response otherwise the route will be
+//             loading to internity and it stucks in this middleware
+// }
+// route.get("/auth", middleware, (req, res) => {
+//     console.log("Hello to my auth page")
+//     res.send('<h1>hello from auth page</h1>')
+// })
+
+/* output : Example app listening on port 3000
+Connection Succesfull
+hello my middleware /first run 
+Hello to my auth page /second run
+*/
+
+
+// auth api
+
+route.get("/auth", authenticate, (req, res) => {
+    // console.log("my authenticate api route")
+    res.send(req.loggedUser) //this sends the whole user object to my home page of the user logged in
+})
 
 
 

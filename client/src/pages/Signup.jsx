@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { Link, useNavigate } from "react-router-dom";
+import { ToastAlert } from "../utils/toast";
 
 export default function SimpleRegistrationForm() {
   const nav = useNavigate();
@@ -35,12 +36,14 @@ export default function SimpleRegistrationForm() {
       if (errorStatuses.includes(res.status) || !data) {
         setLoad(false);
         console.log(data);
-        window.alert(data.error);
+        ToastAlert(data.error, "error");
       } else {
         setLoad(false);
         console.log("Data successfully handed to backend", data);
         setregData({ fname: "", lname: "", age: 0, email: "", password: "" });
-        window.alert(`${res.status} User Signed in`);
+        nav("/login");
+        // window.alert(`${res.status} User Signed in`);
+        ToastAlert(`${res.status} User Signed in`,"success")
       }
     } catch (error) {
       console.error("Error:", error);
@@ -51,7 +54,7 @@ export default function SimpleRegistrationForm() {
   return (
     <Card
       color="transparent"
-      className="flex justify-center place-items-center h-screen"
+      className="flex justify-center mt-[8rem] place-items-center h-screen"
       shadow={false}
     >
       <Typography variant="h2" color="blue-gray">

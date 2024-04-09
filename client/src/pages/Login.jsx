@@ -7,10 +7,11 @@ import {
   Button,
   Typography,
 } from "@material-tailwind/react";
-import { Link , useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { ToastAlert } from "../utils/toast";
 
 export default function Login() {
-  const nav = useNavigate()
+  const nav = useNavigate();
   const [load, setLoad] = useState(false);
   const [LregData, setLregData] = useState({
     email: "",
@@ -24,21 +25,21 @@ export default function Login() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-        },  
+        },
         body: JSON.stringify(LregData),
       });
       const data = await res.json(); // Await the promise
-      const errorStatuses = [400,401]
+      const errorStatuses = [400, 401];
       if (errorStatuses.includes(res.status) || !data) {
         setLoad(false);
         console.log(data);
-        window.alert(data.error)
-
+        ToastAlert(data.error, "error");
       } else {
         setLoad(false);
         console.log("Data successfully handed to backend", data);
-        setLregData({email:"",password:""})
-        window.alert("User logged in");
+        setLregData({ email: "", password: "" });
+        nav("/");
+        ToastAlert(`${res.status} user logged in`,"success");
       }
     } catch (error) {
       console.error("Error:", error);
