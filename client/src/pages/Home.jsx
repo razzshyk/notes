@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import homegif from "../../public/background.gif"
 import { Link, useNavigate } from "react-router-dom";
 import { ToastAlert } from "../utils/toast";
 import { Typography } from "@material-tailwind/react";
@@ -52,8 +52,11 @@ const Home = (props) => {
         if (res.status !== 200) {
           ToastAlert(res.error, "error");
         }
+        ToastAlert(
+          `${(user.fname + " " + user.lname).toUpperCase()} is logged out`,
+          "error"
+        );
         nav("/login");
-        ToastAlert(`${props.name.toUpperCase()} is logged out`);
       })
       .catch((e) => {
         console.log(e);
@@ -61,7 +64,7 @@ const Home = (props) => {
   };
   return (
     <>
-      {user ? (
+      {homegif ? (
         <>
           <div className="absolute lg:right-5 right-2 top-2 lg:top-5">
             <Button size="sm" className=" bg-[#4338ca]" onClick={signout}>
@@ -70,7 +73,7 @@ const Home = (props) => {
           </div>
           <div
             style={{
-              backgroundImage: "url(/background.gif)",
+              backgroundImage: `url(${homegif})`,
               backgroundRepeat: "no-repeat",
               backgroundSize: "cover",
             }}
@@ -87,11 +90,12 @@ const Home = (props) => {
               <p className="text-center lg:text-[2rem] text-[1rem] tracking-wider  text-[#a5b4fc]">
                 {(user.fname + " " + user.lname).toUpperCase()}
               </p>
-              <Button size="sm" className=" bg-[#c026d3]">
-                <p
-                  className="lg:text-lg text-[10px] tracking-wide"
-                  onClick={() => nav("/notes")}
-                >
+              <Button
+                size="sm"
+                onClick={() => nav("/notes")}
+                className=" bg-[#c026d3]"
+              >
+                <p className="lg:text-lg text-[10px] tracking-wide">
                   Go To My Notes
                 </p>
               </Button>

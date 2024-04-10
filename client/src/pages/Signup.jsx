@@ -60,7 +60,7 @@ export default function SimpleRegistrationForm() {
       }}
       className="flex flex-col justify-center place-items-center lg:py-[2rem] min-h-screen"
     >
-      <div className="flex flex-col p-[2rem] mx-[3rem] border shadow-xl rounded-lg">
+      <div className="flex flex-col p-[2rem] mx-[3rem] shadow-2xl rounded-3xl">
         <Typography variant="h2" color="white">
           Sign Up
         </Typography>
@@ -77,6 +77,7 @@ export default function SimpleRegistrationForm() {
                 setregData({ ...regData, fname: e.target.value });
               }}
               size="lg"
+              style={{color:"white",letterSpacing:"1px",fontWeight:"700",fontSize:"1rem"}}
               placeholder="first name"
               className="text-slate-300 !border-t-blue-gray-200 focus:!border-t-gray-900"
               labelProps={{
@@ -91,6 +92,7 @@ export default function SimpleRegistrationForm() {
                 setregData({ ...regData, lname: e.target.value });
               }}
               size="lg"
+              style={{color:"white",letterSpacing:"1px",fontWeight:"700",fontSize:"1rem"}}
               placeholder="last name"
               className="text-slate-300 !border-t-blue-gray-200 focus:!border-t-gray-900"
               labelProps={{
@@ -107,8 +109,9 @@ export default function SimpleRegistrationForm() {
               min={1}
               max={40}
               type="number"
+              style={{color:"white",letterSpacing:"1px",fontWeight:"700",fontSize:"1rem"}}
               size="lg"
-              placeholder="age"
+              placeholder="your age"
               className="text-slate-300 !border-t-blue-gray-200 focus:!border-t-gray-900"
               labelProps={{
                 className: "before:content-none after:content-none",
@@ -122,7 +125,8 @@ export default function SimpleRegistrationForm() {
                 setregData({ ...regData, email: e.target.value });
               }}
               size="lg"
-              placeholder="name@mail.com"
+              style={{color:"white",letterSpacing:"1px",fontWeight:"700",fontSize:"1rem"}}
+              placeholder="example@mail.com"
               className="text-slate-300 !border-t-blue-gray-200 focus:!border-t-gray-900"
               labelProps={{
                 className: "before:content-none after:content-none",
@@ -137,6 +141,7 @@ export default function SimpleRegistrationForm() {
               }}
               type="password"
               size="lg"
+              style={{color:"white",letterSpacing:"1px",fontWeight:"700",fontSize:"1rem"}}
               placeholder="********"
               className="text-slate-300 !border-t-blue-gray-200 focus:!border-t-gray-900"
               labelProps={{
