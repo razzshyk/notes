@@ -64,7 +64,7 @@ const Home = (props) => {
   };
   return (
     <>
-      {homegif ? (
+      {user.fname ? (
         <>
           <div className="absolute lg:right-5 right-2 top-2 lg:top-5">
             <Button size="sm" className=" bg-[#4338ca]" onClick={signout}>

@@ -125,12 +125,12 @@ export default function Login() {
           <Button onClick={submit} className="mt-6" fullWidth>
             {!load ? "Login" : "Loading..."}
           </Button>
-          <Typography color="white" className="mt-4 text-center font-normal">
+          <p className="mt-4 text-center font-normal">
             Don't have an account?{" "}
-            <Link to="/signup" className="font-medium text-gray-900">
+            <Link to="/signup" className="font-medium text-gray-900 hover:text-[#fff]">
               Signup
             </Link>
-          </Typography>
+          </p>
         </form>
       </div>
     </div>

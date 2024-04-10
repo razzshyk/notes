@@ -61,7 +61,7 @@ export default function SimpleRegistrationForm() {
       className="flex flex-col justify-center place-items-center lg:py-[2rem] min-h-screen"
     >
       <div className="flex flex-col p-[2rem] mx-[3rem] shadow-2xl rounded-3xl">
-        <Typography variant="h2" color="white">
+        <Typography variant="h4" color="white">
           Sign Up
         </Typography>
         <Typography color="white" className="mt-1 font-normal">
@@ -167,12 +167,12 @@ export default function SimpleRegistrationForm() {
           <Button onClick={submit} className="mt-6" fullWidth>
             {!load ? "Sign up" : "Loading..."}
           </Button>
-          <Typography color="white" className="mt-4 text-center font-normal">
+          <p  className="text-[#fff] mt-8 text-center font-normal">
             Already have an account?{" "}
-            <Link to="/login" className="font-medium text-slate-200">
+            <Link to="/login" className="font-medium text-slate-200 hover:text-[#000]">
               Login
             </Link>
-          </Typography>
+          </p>
         </form>
       </div>
     </div>
