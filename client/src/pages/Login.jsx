@@ -28,7 +28,7 @@ export default function Login() {
         },
         body: JSON.stringify(LregData),
       });
-      const data = await res.json(); // Await the promise
+      const data = await res.json(); 
       const errorStatuses = [400, 401];
       if (errorStatuses.includes(res.status) || !data) {
         setLoad(false);

@@ -4,9 +4,11 @@ const route = express.Router()
 const bycrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const authenticate = require("../middlewares/authenticate")
+const filterUserNotes = require("../middlewares/filterUserNotes")
 
 require("../db/connection")
 const User = require("../model/userSchema")
+const PostNotes = require("../model/notesSchema")
 
 
 route.get(("/"), (req, res) => {
@@ -129,6 +131,31 @@ route.get("/auth", authenticate, (req, res) => {
 route.get("/logout", (req, res) => {
     res.clearCookie('jwtoken', { path: "/" })
     res.status(200).send({ message: "user logout" })
+})
+
+// post notes api
+route.post("/postnotes", (req, res) => {
+    const { uid, title, notes } = req.body
+    if (!uid) {
+        return res.status(401).send({ error: "not uploaded" })
+    }
+    const postnotes = new PostNotes({ uid, title, notes })
+
+    postnotes.save().then(() => {
+        res.status(201).json({ mesaage: "Data is succesfully uploaded in DB" })
+    }).catch((err) => { res.status(500).json({ error: "Error Occured" + err }) })
+    // res.send({message : "send"})
+})
+
+// get notes api
+
+route.get("/getnotes", filterUserNotes, (req, res) => {
+    res.send(req.loggedUserNotes)
+})
+
+// update api 
+route.put("/updatenotes", (req, res) => {
+    
 })
 
 

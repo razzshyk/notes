@@ -9,12 +9,13 @@ import { Slide, ToastContainer } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastAlert } from "./utils/toast";
 
+
 function App() {
   
   return (
     <>
       <Routes>
-        <Route index element={<Home/>} />
+        <Route index element={<Home />} />
         <Route path="/signup" element={<SimpleRegistrationForm />} />
         <Route path="/login" element={<Login />} />
         <Route path="/notes" element={<Notes />} />
