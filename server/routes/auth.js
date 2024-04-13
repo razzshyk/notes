@@ -97,7 +97,7 @@ route.post("/login", (req, res) => {
 })
 
 
-// Middlewares
+// Middlewares Notes
 
 // user auth using middleware : a simple js functions used in between route('/') and (req,res) and 
 // it runs before of user visited that particular route
@@ -148,15 +148,78 @@ route.post("/postnotes", (req, res) => {
 })
 
 // get notes api
-
 route.get("/getnotes", filterUserNotes, (req, res) => {
     res.send(req.loggedUserNotes)
 })
 
-// update api 
-route.put("/updatenotes", (req, res) => {
-    
+// update note api 
+route.put("/updatenotes", async (req, res) => {
+    const { uid, noteID, title, notes } = req.body;
+
+    try {
+        if (!noteID || !uid) {
+            return res.status(404).send({ error: "Note not found." });
+        } else if (!title || !notes) {
+            return res.status(400).send({ error: "Fill all Fields" })
+        }
+
+        // Find the note by uid and noteId
+        const existingNote = await PostNotes.findOne({ uid, _id: noteID })
+
+        if (!existingNote) {
+            return res.status(404).send({ error: "Note not found." });
+        }
+
+        // Updating the found note
+        existingNote.title = title;
+        existingNote.notes = notes;
+        await existingNote.save();
+
+        res.send({ message: "Note updated successfully." });
+    } catch (error) {
+        console.error("Error updating note:", error);
+        res.status(500).send({ error: "Internal server error." });
+    }
+});
+
+// delete a single note
+route.delete('/deletenote', async (req, res) => {
+    const { uid, noteID } = req.body;
+    try {
+        if (!noteID || !uid) {
+            return res.status(404).send({ error: "Note not found." });
+        }
+        // Find the note by uid and noteId
+        const existingNote = await PostNotes.findOne({ uid, _id: noteID }) //check the specific note of specific user using noteID
+        if (!existingNote) {
+            return res.status(404).send({ error: "Note not found." });
+        }
+        await existingNote.deleteOne();
+        res.send({ message: "Note deleted successfully." });
+    } catch (err) {
+        console.error("Error deleting note:", err);
+        res.status(500).send({ error: "Internal server error." });
+    }
 })
 
+
+// delete all specific user notes
+route.delete('/deleteAllnotes', async (req, res) => {
+    const { uid } = req.body;
+    try {
+        if (!uid) {
+            return res.status(404).send({ error: "Note not found." });
+        }
+        // Find the note by uid 
+        const result = await PostNotes.deleteMany({ uid });
+        if (result.deletedCount === 0) {
+            return res.status(404).send({ error: "No notes found for the user." });
+        }
+        res.send({ message: "All Notes are deleted successfully." });
+    } catch (err) {
+        console.error("Error deleting notes:", err);
+        res.status(500).send({ error: "Internal server error." });
+    }
+})
 
 module.exports = route

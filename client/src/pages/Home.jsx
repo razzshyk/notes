@@ -58,7 +58,7 @@ const Home = (props) => {
         }
         ToastAlert(
           `${(user.fname + " " + user.lname).toUpperCase()} is logged out`,
-          "error"
+          "success"
         );
         localStorage.clear();
         nav("/login");

@@ -7,6 +7,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import PricingCards from "../componenets/Pricingcards";
 import CircularProgress from "@mui/joy/CircularProgress";
+import DeleteModal from "../componenets/DeleteModal";
 
 const Notes = () => {
   const nav = useNavigate();
@@ -35,14 +36,15 @@ const Notes = () => {
       .catch((e) => console.log("hajdhj", e));
     setRef(false);
   };
-  // notes.map((obj,index)=>console.log(obj.title,obj.notes));
+  // notes.map((obj,index)=>console.log(obj));
 
   const handleNotesPosted = () => {
-    getNotes(); // Re-fetch notes after posting
+    //child to parent prop passing technique call again when user posts a note
+    getNotes();
   };
   React.useEffect(() => {
     getNotes();
-  }, []); // fix this issue its not re-render after posting notes
+  }, []);
 
   return (
     <>
@@ -57,31 +59,47 @@ const Notes = () => {
         >
           <div className="absolute left-4 top-4">
             <ArrowBackIcon
+              fontSize="large"
               onClick={() => nav("/")}
               className="cursor-pointer"
-              style={{ color: "white" }}
+              style={{
+                color: "black",
+                backgroundColor: "#e2e8f0",
+                borderRadius: "18px",
+                padding: "7px",
+              }}
             />
           </div>
-          <div className="text-start mx-auto max-w-screen lg:w-[70rem] lg:mx-auto mt-8">
+          <div className="text-start mx-auto max-w-screen lg:w-[70rem] lg:mx-auto mt-[4rem] lg:mt-8">
             <h1 className="text-[#d6d3d1] lg:text-4xl mb-4">Your Notes</h1>
-            <BasicModalDialog onNotesPosted={handleNotesPosted} />
-            <div className="flex justify-center flex-wrap gap-y-[1rem] lg:gap-2 mt-[2rem]">
+            <div className="flex justify-between">
+              <BasicModalDialog onNotesPosted={handleNotesPosted} />
+              <DeleteModal deletAll={"Delete All"} handleNotesPosted={handleNotesPosted} />
+            </div>
+            <div className="flex justify-center flex-wrap md:gap-x-[2rem] gap-[1rem] lg:gap-2 mt-[3rem]">
               {notes.length > 0 ? (
                 notes.map((obj, index) => {
                   return (
                     <PricingCards
-                      key1={index}
+                      handleNotesPosted={handleNotesPosted}
+                      noteID={obj._id}
+                      key={index}
                       title={obj.title}
                       notes={obj.notes}
                     />
                   );
                 })
               ) : (
-                <div className="flex justif-center ">
+                <div className="flex justif-center gap-x-3 text-white">
+                  {ref && (
+                    <p className="white text-3xl">
+                      No Notes Available <SentimentVeryDissatisfiedIcon />
+                    </p>
+                  )}
                   <CircularProgress
                     color="primary"
                     size="lg"
-                    value={36}
+                    value={ref ? 0 : 36}
                     variant="plain"
                   />
                 </div>

@@ -14,14 +14,14 @@ import { ToastAlert } from "../utils/toast";
 export default function BasicModalDialog({ onNotesPosted }) {
   const [open, setOpen] = React.useState(false);
   const [load, setLoad] = React.useState(false);
-  const id = localStorage.getItem("uid");
+  const id = localStorage.getItem("uid");  // current logged in user id of db
   const [notesData, setnotesData] = React.useState({
     uid: id,
     title: "",
     notes: "",
   });
 
-  // Set uid property of notesData state when component initializes
+  
   React.useEffect(() => {
     setnotesData((prevData) => ({
       ...prevData,
@@ -48,7 +48,7 @@ export default function BasicModalDialog({ onNotesPosted }) {
         ToastAlert(note.error, "error");
       } else {
         setLoad(false);
-        setnotesData({ title: "", notes: "", uid: id }); // Reset uid after submission
+        setnotesData({ title: "", notes: "", uid: id })
         setOpen(false);
         onNotesPosted();
         ToastAlert(`task uploaded`, "success");
