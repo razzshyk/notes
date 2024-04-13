@@ -151,14 +151,6 @@ const Home = (props) => {
                   </Box>
                 </Box>
                 <Divider/>
-                <Box>
-                <Box
-                    variant="p"
-                    sx={{ display: "flex", flexDirection: "column" }}
-                  >
-                    Your Password<span className=" font-bold">{user.password}</span>
-                  </Box>
-                </Box>
               </Box>
             </DialogContent>
           </ModalDialog>
