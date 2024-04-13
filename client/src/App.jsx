@@ -6,18 +6,19 @@ import Home from "./pages/Home";
 import Notes from "./pages/Notes";
 import "react-toastify/dist/ReactToastify.css";
 import { Slide, ToastContainer } from "react-toastify";
+import AuthRoute from "./routes/AuthRoute";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastAlert } from "./utils/toast";
 
-
 function App() {
-  
   return (
     <>
       <Routes>
         <Route index element={<Home />} />
-        <Route path="/signup" element={<SimpleRegistrationForm />} />
-        <Route path="/login" element={<Login />} />
+        <Route element={<AuthRoute />}>
+          <Route path="/signup" element={<SimpleRegistrationForm />} />
+          <Route path="/login" element={<Login />} />
+        </Route>
         <Route path="/notes" element={<Notes />} />
       </Routes>
 

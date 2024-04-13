@@ -38,10 +38,10 @@ export default function UpdateModal(props) {
     })
       .then((res) => res.json())
       .then((data) => {
-        if(data.error){
-            ToastAlert(data.error,"error")
+        if (data.error) {
+          ToastAlert(data.error, "error");
         }
-        console.log("update succesfully", data);
+        ToastAlert(data.message, "success");
         setupdateValue({ title: "", notes: "" });
         handleNotesPosted();
         setOpen(false);

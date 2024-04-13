@@ -35,11 +35,11 @@ export default function SimpleRegistrationForm() {
       const errorStatuses = [400, 401, 422, 413];
       if (errorStatuses.includes(res.status) || !data) {
         setLoad(false);
-        console.log(data);
+        // console.log(data);
         ToastAlert(data.error, "error");
       } else {
         setLoad(false);
-        console.log("Data successfully handed to backend", data);
+        // console.log("Data successfully handed to backend", data);
         setregData({ fname: "", lname: "", age: 0, email: "", password: "" });
         nav("/login");
         // window.alert(`${res.status} User Signed in`);

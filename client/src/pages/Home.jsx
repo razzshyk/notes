@@ -4,10 +4,22 @@ import { Link, useNavigate } from "react-router-dom";
 import { ToastAlert } from "../utils/toast";
 import { Typography } from "@material-tailwind/react";
 import { Button } from "@material-tailwind/react";
+import {
+  Box,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  Modal,
+  ModalClose,
+  ModalDialog,
+  Stack,
+} from "@mui/joy";
+import WavingHandIcon from "@mui/icons-material/WavingHand";
 
 const Home = (props) => {
   const nav = useNavigate();
-  const [user, setUser] = useState(null); 
+  const [user, setUser] = useState(null);
+  const [open, setOpen] = React.useState(false);
 
   // calling user authentication api (get request)
   const userAuth = () => {
@@ -20,11 +32,11 @@ const Home = (props) => {
       credentials: "include",
     })
       .then((res) => {
-        console.log("Response status:", res.status);
+        // console.log("Response status:", res.status);
         return res.json();
       })
       .then((data) => {
-        console.log("Response data:", data);
+        // console.log("Response data:", data);
         if (data.error) {
           ToastAlert(data.error, "error");
           nav("/login");
@@ -37,11 +49,10 @@ const Home = (props) => {
         console.error("Error fetching data:", error);
       });
   };
-  
 
   useEffect(() => {
     userAuth();
-  }, []); 
+  }, []);
 
   const signout = () => {
     fetch("/api/logout", {
@@ -68,7 +79,8 @@ const Home = (props) => {
       });
   };
 
-  if (user === null) { // Check if user state is null
+  if (user === null) {
+    // Check if user state is null
     return (
       <div className="flex justify-center place-items-center h-screen">
         <img src="/loader.gif" alt="Loading..." />
@@ -78,10 +90,79 @@ const Home = (props) => {
 
   return (
     <>
-      <div className="absolute lg:right-5 right-2 top-2 lg:top-5">
+      <div className="absolute flex gap-4 justify-between lg:right-5 right-2 top-2 lg:top-5">
         <Button size="sm" className=" bg-[#4338ca]" onClick={signout}>
           <p className="lg:text-lg text-[10px] tracking-wide">Signout</p>
         </Button>
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <Button
+            variant="filled"
+            size="sm"
+            className=" bg-[#4338ca]"
+            onClick={() => setOpen(true)}
+          >
+            <p className="lg:text-lg text-[10px] tracking-wide">Profile</p>
+          </Button>
+        </Stack>
+        <Modal open={open} onClose={() => setOpen(false)}>
+          <ModalDialog layout="center" size="lg" variant="soft">
+            <ModalClose />
+            <DialogTitle>
+              <p className="text-center text-4xl flex justify-center">
+                Welcome !
+              </p><WavingHandIcon fontSize="large"/>
+            </DialogTitle>
+            <DialogContent>
+              <Box
+                component={"div"}
+                sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+              >
+                <Box>Your ID : {user._id}</Box>
+                <Divider />
+                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                  <Box
+                    variant="p"
+                    sx={{ display: "flex", flexDirection: "column" }}
+                  >
+                    Your First Name
+                    <span className="font-bold">{user.fname}</span>
+                  </Box>
+                  <Box
+                    variant="p"
+                    sx={{ display: "flex", flexDirection: "column" }}
+                  >
+                    Your Last Name
+                    <span className=" font-bold">{user.lname}</span>
+                  </Box>
+                </Box>
+                <Divider />
+                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                  <Box
+                    variant="p"
+                    sx={{ display: "flex", flexDirection: "column" }}
+                  >
+                    Your Age<span className="font-bold">{user.age + " years"}</span>
+                  </Box>
+                  <Box
+                    variant="p"
+                    sx={{ display: "flex", flexDirection: "column" }}
+                  >
+                    Your Email<span className=" font-bold">{user.email}</span>
+                  </Box>
+                </Box>
+                <Divider/>
+                <Box>
+                <Box
+                    variant="p"
+                    sx={{ display: "flex", flexDirection: "column" }}
+                  >
+                    Your Password<span className=" font-bold">{user.password}</span>
+                  </Box>
+                </Box>
+              </Box>
+            </DialogContent>
+          </ModalDialog>
+        </Modal>
       </div>
       <div
         style={{
