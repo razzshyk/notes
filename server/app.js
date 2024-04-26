@@ -7,8 +7,8 @@ dotenv.config({path : "./config.env"})
 const PORT = process.env.PORT || 5000;
 
 
-const route = require("./routes/auth")
 app.use(express.json())
+const route = require("./routes/auth")
 app.use(route)
 
 
